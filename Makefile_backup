@@ -1,0 +1,23 @@
+# Build options
+
+CXXOBJS	:=
+CXXOBJS += NX_CConfig.o
+
+CXXFLAGS += -fPIC
+
+TARGET := libnxconfig.so
+
+OBJS := $(CXXOBJS)
+
+all: $(TARGET)
+
+$(TARGET):	depend $(OBJS)
+	$(CC) -shared -Wl,-soname,$(TARGET) -o $@ $(OBJS)
+
+ifeq (.depend, $(wildcard .depend))
+include .depend
+endif
+
+SRCS := $(CXXOBJS:.o=.cpp)
+depend dep:
+	$(CC) -M $(CFLAGS) $(AFLAGS) $(CXXFLAGS) $(SRCS) > .depend
